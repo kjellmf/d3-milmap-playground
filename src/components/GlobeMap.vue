@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 import { select, Selection } from "d3-selection";
 import { geoOrthographic, geoPath, geoGraticule } from "d3-geo";
 import * as topojson from "topojson";
@@ -28,22 +28,31 @@ let pathGenerator = geoPath()
 let graticule = geoGraticule();
 
 @Component
-export default class GlobeComponent extends Vue {
+export default class GlobeMapComponent extends Vue {
   isMounted = false;
   width = width;
   height = height;
   @Prop() rotation!: [number, number, number];
-  @Prop({type: Number}) scale!: number;
+  @Prop({ type: Number }) scale!: number;
+  svg: any;
 
   mounted() {
     this.isMounted = true;
     proj.scale(this.scale || SCALE);
     proj.rotate(this.rotation || ROTATION);
     this.createGlobe();
+    this.refresh();
+  }
+
+  @Watch('rotation', { deep: true })
+  onRotationChange(rotation:[number,number,number]) {
+    proj.rotate(rotation);
+    this.refresh();
   }
 
   createGlobe() {
     let svg = select(this.$el);
+    this.svg = svg;
     svg
       .append("circle")
       .attr("cx", width / 2)
@@ -63,8 +72,13 @@ export default class GlobeComponent extends Vue {
       .datum(graticule)
       .attr("class", "graticule noclicks")
       .attr("d", pathGenerator);
+  }
 
-    proj.rotate;
+  refresh() {
+    let svg = this.svg;
+    svg.selectAll(".land").attr("d", pathGenerator);
+    svg.selectAll(".countries path").attr("d", pathGenerator);
+    svg.selectAll(".graticule").attr("d", pathGenerator);
   }
 }
 </script>
