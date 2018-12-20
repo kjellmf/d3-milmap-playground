@@ -1,13 +1,23 @@
 <template>
-  <svg :width="width" :height="height"></svg>
+  <svg :width="width" :height="height">
+    <slot v-if="isMounted"></slot>
+  </svg>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { Component, Prop, Watch } from "vue-property-decorator";
+import {
+  Component,
+  Prop,
+  Watch,
+  Inject,
+  Provide
+} from "vue-property-decorator";
 import { select, Selection } from "d3-selection";
 import { geoOrthographic, geoPath, geoGraticule } from "d3-geo";
 import * as topojson from "topojson";
+
+export type RefreshCallback = () => void;
 
 const world = require("../../node_modules/world-atlas/world/110m.json");
 const width = 1200;
@@ -16,7 +26,7 @@ const height = 900;
 const SCALE = 430;
 const ROTATION = [0, 0, 0];
 
-let proj = geoOrthographic()
+var proj = geoOrthographic()
   .scale(SCALE)
   .translate([width / 2, height / 2])
   .clipAngle(90);
@@ -26,33 +36,45 @@ let pathGenerator = geoPath()
   .pointRadius(1.5);
 
 let graticule = geoGraticule();
+let svg: any;
 
 @Component
 export default class GlobeMapComponent extends Vue {
   isMounted = false;
   width = width;
   height = height;
+  centerPos = [0, 0];
+  callbacks!: Array<RefreshCallback>;
   @Prop() rotation!: [number, number, number];
   @Prop({ type: Number }) scale!: number;
-  svg: any;
+  @Provide() globeData: any = {};
+  @Provide() rreg = this.registerRefresh;
+
+  created() {
+    this.callbacks = [];
+  }
 
   mounted() {
-    this.isMounted = true;
+    svg = select(this.$el);
+    console.log(svg);
+    this.globeData.svg = svg;
+    this.globeData.proj = proj;
+    this.globeData.centerPos = this.centerPos;
+    console.log("set container");
     proj.scale(this.scale || SCALE);
     proj.rotate(this.rotation || ROTATION);
     this.createGlobe();
     this.refresh();
+    this.isMounted = true;
   }
 
-  @Watch('rotation', { deep: true })
-  onRotationChange(rotation:[number,number,number]) {
+  @Watch("rotation", { deep: true })
+  onRotationChange(rotation: [number, number, number]) {
     proj.rotate(rotation);
     this.refresh();
   }
 
   createGlobe() {
-    let svg = select(this.$el);
-    this.svg = svg;
     svg
       .append("circle")
       .attr("cx", width / 2)
@@ -75,10 +97,18 @@ export default class GlobeMapComponent extends Vue {
   }
 
   refresh() {
-    let svg = this.svg;
+    this.globeData.centerPos = (proj as any).invert([
+      this.width / 2,
+      this.height / 2
+    ]);
     svg.selectAll(".land").attr("d", pathGenerator);
     svg.selectAll(".countries path").attr("d", pathGenerator);
     svg.selectAll(".graticule").attr("d", pathGenerator);
+    this.callbacks.forEach(f => f());
+  }
+
+  registerRefresh(f: RefreshCallback) {
+    this.callbacks.push(f);
   }
 }
 </script>
