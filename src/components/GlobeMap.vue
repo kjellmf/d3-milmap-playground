@@ -15,6 +15,7 @@ import {
 } from "vue-property-decorator";
 import { select, Selection } from "d3-selection";
 import { geoOrthographic, geoPath, geoGraticule } from "d3-geo";
+import geoZoom from "d3-geo-zoom";
 import * as topojson from "topojson";
 
 export type RefreshCallback = () => void;
@@ -47,8 +48,8 @@ export default class GlobeMapComponent extends Vue {
   refresCallbacks!: Array<RefreshCallback>;
   @Prop() rotation!: [number, number, number];
   @Prop({ type: Number }) scale!: number;
+  @Prop({ default: true }) interactive = true;
   @Provide() globeData: any = {};
-
 
   created() {
     this.refresCallbacks = [];
@@ -64,6 +65,12 @@ export default class GlobeMapComponent extends Vue {
     this.createGlobe();
     this.refresh();
     this.isMounted = true;
+    if (this.interactive) {
+      geoZoom()
+        .projection(proj)
+        .onMove(this.refresh)
+        (svg.node());
+    }
   }
 
   @Watch("rotation", { deep: true })
@@ -99,6 +106,7 @@ export default class GlobeMapComponent extends Vue {
       this.width / 2,
       this.height / 2
     ]);
+    svg.selectAll(".earth-circle").attr("r", proj.scale());
     svg.selectAll(".land").attr("d", pathGenerator);
     svg.selectAll(".countries path").attr("d", pathGenerator);
     svg.selectAll(".graticule").attr("d", pathGenerator);

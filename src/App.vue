@@ -31,7 +31,7 @@ export default class App extends Vue {
   layer = MARKERS;
   spin = false;
   mounted() {
-    this.toggleSpin();
+    //this.toggleSpin();
   }
 
   toggleSpin() {
