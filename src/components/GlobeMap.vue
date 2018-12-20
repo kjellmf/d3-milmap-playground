@@ -44,23 +44,21 @@ export default class GlobeMapComponent extends Vue {
   width = width;
   height = height;
   centerPos = [0, 0];
-  callbacks!: Array<RefreshCallback>;
+  refresCallbacks!: Array<RefreshCallback>;
   @Prop() rotation!: [number, number, number];
   @Prop({ type: Number }) scale!: number;
   @Provide() globeData: any = {};
-  @Provide() rreg = this.registerRefresh;
+
 
   created() {
-    this.callbacks = [];
+    this.refresCallbacks = [];
   }
 
   mounted() {
     svg = select(this.$el);
-    console.log(svg);
     this.globeData.svg = svg;
     this.globeData.proj = proj;
     this.globeData.centerPos = this.centerPos;
-    console.log("set container");
     proj.scale(this.scale || SCALE);
     proj.rotate(this.rotation || ROTATION);
     this.createGlobe();
@@ -104,11 +102,15 @@ export default class GlobeMapComponent extends Vue {
     svg.selectAll(".land").attr("d", pathGenerator);
     svg.selectAll(".countries path").attr("d", pathGenerator);
     svg.selectAll(".graticule").attr("d", pathGenerator);
-    this.callbacks.forEach(f => f());
+    this.refresCallbacks.forEach(f => f());
+  }
+  @Provide()
+  registerRefreshCallback(f: RefreshCallback) {
+    this.refresCallbacks.push(f);
   }
 
-  registerRefresh(f: RefreshCallback) {
-    this.callbacks.push(f);
+  getRotation() {
+    return proj.rotate();
   }
 }
 </script>

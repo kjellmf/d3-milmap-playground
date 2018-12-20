@@ -13,7 +13,7 @@ export default class MapSymbolLayer extends Vue {
 
   @Prop({ type: Object }) layer!: FeatureCollection;
   @Inject() globeData!: any;
-  @Inject() rreg!:any;
+  @Inject() registerRefreshCallback!: any;
 
   mounted() {
     let { proj, svg } = this.globeData;
@@ -32,7 +32,7 @@ export default class MapSymbolLayer extends Vue {
         return s.asSVG();
       });
     this.positionSymbols();
-    this.rreg(this.positionSymbols);
+    this.registerRefreshCallback(this.positionSymbols);
   }
 
   get centerPos() {
