@@ -3,5 +3,4 @@ declare module '*.vue' {
   export default Vue
 }
 
-
 declare module 'd3-geo-zoom';

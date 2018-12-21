@@ -30,6 +30,7 @@ export default class App extends Vue {
   timer!: Timer;
   layer = MARKERS;
   spin = false;
+
   mounted() {
     //this.toggleSpin();
   }

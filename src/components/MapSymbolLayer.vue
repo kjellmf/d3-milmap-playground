@@ -1,11 +1,9 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop, Watch, Inject } from "vue-property-decorator";
-import { select, Selection } from "d3-selection";
-import { geoOrthographic, geoPath, geoGraticule, geoDistance } from "d3-geo";
-import * as topojson from "topojson";
+import { geoDistance } from "d3-geo";
 import * as ms from "milsymbol";
-import { GeoJsonObject, FeatureCollection } from "geojson";
+import { FeatureCollection } from "geojson";
 
 @Component
 export default class MapSymbolLayer extends Vue {

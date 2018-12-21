@@ -10,10 +10,9 @@ import {
   Component,
   Prop,
   Watch,
-  Inject,
   Provide
 } from "vue-property-decorator";
-import { select, Selection } from "d3-selection";
+import { select } from "d3-selection";
 import { geoOrthographic, geoPath, geoGraticule } from "d3-geo";
 import geoZoom from "d3-geo-zoom";
 import * as topojson from "topojson";
@@ -112,6 +111,7 @@ export default class GlobeMapComponent extends Vue {
     svg.selectAll(".graticule").attr("d", pathGenerator);
     this.refresCallbacks.forEach(f => f());
   }
+
   @Provide()
   registerRefreshCallback(f: RefreshCallback) {
     this.refresCallbacks.push(f);
