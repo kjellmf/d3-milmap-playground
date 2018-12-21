@@ -138,6 +138,42 @@ export const MARKERS = {
         type: "Point",
         coordinates: [-30, 1]
       }
+    },
+    {
+      type: "Feature",
+      properties: {
+        name: "N12",
+        sidc: "10032500001313000000"
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [0, 90]
+      }
+    },
+    {
+      type: "Feature",
+      properties: {
+        name: "N12",
+        sidc: "10032500001602050000"
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [0, -90]
+      }
+    },
+    {
+      type: "Feature",
+      properties: {
+        name: "N12",
+        sidc: "10033000001401090000"
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-155, 20]
+      }
     }
+
+
+
   ]
 };
