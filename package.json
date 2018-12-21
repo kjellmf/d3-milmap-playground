@@ -2,9 +2,14 @@
   "name": "globe-vue",
   "version": "0.1.0",
   "private": true,
+  "author": "Kjell Magne Fauske <kjellmf@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kjellmf/d3-milmap-playground.git"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --modern",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -24,8 +29,8 @@
   "devDependencies": {
     "@types/d3-geo": "^1.10.3",
     "@types/d3-selection": "^1.3.4",
-    "@types/topojson": "^3.2.1",
     "@types/d3-timer": "^1.0.8",
+    "@types/topojson": "^3.2.1",
     "@vue/cli-plugin-babel": "^3.2.0",
     "@vue/cli-plugin-eslint": "^3.2.0",
     "@vue/cli-plugin-typescript": "^3.2.0",
@@ -37,6 +42,7 @@
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
     "typescript": "^3.0.0",
+    "vue-cli-ghpages": "^1.0.0",
     "vue-template-compiler": "^2.5.17"
   },
   "eslintConfig": {
