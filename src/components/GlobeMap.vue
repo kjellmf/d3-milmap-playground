@@ -20,7 +20,7 @@ import * as topojson from "topojson";
 export type RefreshCallback = () => void;
 
 const world = require("../../node_modules/world-atlas/world/110m.json");
-const width = 1200;
+const width = 900;
 const height = 900;
 
 const SCALE = 430;

@@ -1,9 +1,20 @@
 <template>
-  <div id="app">
-    <GlobeMap :rotation="rotation" :scale="scale" ref="gmap">
-      <MapSymbolLayer :layer="layer"/>
-    </GlobeMap>
-    <button @click="toggleSpin">Toggle spin</button>
+  <div id="app" class="container is-fluid">
+    <div class="columns is-marginless">
+      <div class="column mapview">
+        <GlobeMap :rotation="rotation" :scale="scale" ref="gmap">
+          <MapSymbolLayer :layer="layer"/>
+        </GlobeMap>
+      </div>
+      <div class="column is-4 has-background-light sidebar">
+        <div class="content">
+          <h1>D3 map experiment</h1>
+        </div>
+        <div>
+          <button class="button" @click="toggleSpin">Toggle spin</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -59,4 +70,23 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.mapview {
+  margin-left: 32px;
+}
+
+.sidebar {
+  height: 100vh;
+}
 </style>
