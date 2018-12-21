@@ -25,7 +25,7 @@ const width = 1200;
 const height = 900;
 
 const SCALE = 430;
-const ROTATION = [0, 0, 0];
+const ROTATION = [0, 0, 0] as [number, number, number];
 
 var proj = geoOrthographic()
   .scale(SCALE)
