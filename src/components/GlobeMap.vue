@@ -1,5 +1,5 @@
 <template>
-  <svg :width="width" :height="height">
+  <svg :viewBox="`0 0 ${width} ${height}`" class="map-container">
     <slot v-if="isMounted"></slot>
   </svg>
 </template>
@@ -123,6 +123,10 @@ export default class GlobeMapComponent extends Vue {
 </script>
 
 <style>
+.map-container {
+  max-height:900px;
+}
+
 .land {
   fill: white;
   opacity: 0.5;
