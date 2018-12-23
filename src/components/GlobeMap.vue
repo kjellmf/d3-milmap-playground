@@ -16,6 +16,8 @@ import { select } from "d3-selection";
 import { geoOrthographic, geoPath, geoGraticule } from "d3-geo";
 import geoZoom from "d3-geo-zoom";
 import * as topojson from "topojson";
+import { transition } from "d3-transition";
+import { interpolate } from "d3-interpolate";
 
 export type RefreshCallback = () => void;
 
@@ -119,12 +121,25 @@ export default class GlobeMapComponent extends Vue {
   getRotation() {
     return proj.rotate();
   }
+
+  rotateTo(p) {
+    let vm = this;
+    transition()
+      .duration(2000)
+      .tween("rotate", () => {
+        let r = interpolate(proj.rotate(), [-p[0], -p[1]]) as any;
+        return function (t) {
+          proj.rotate(r(t));
+          vm.refresh()
+        };
+      })
+  }
 }
 </script>
 
 <style>
 .map-container {
-  max-height:900px;
+  max-height: 900px;
 }
 
 .land {

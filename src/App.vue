@@ -53,7 +53,7 @@ export default class App extends Vue {
   onMarkerSelect(feature: Feature<Point>) {
     console.log("Selected", { ...feature.properties });
     let p = feature.geometry.coordinates;
-    this.rotation = [-p[0], -p[1]];
+    (this.$refs.gmap as any).rotateTo(p);
   }
 
   toggleSpin() {
