@@ -27,7 +27,7 @@ import MapSymbolLayer from "./components/MapSymbolLayer.vue";
 
 import { MARKERS } from "./markers";
 import MarkerList from "@/components/MarkerList.vue";
-import { Feature } from "geojson";
+import { Feature, Point } from "geojson";
 
 const velocity = [0.015, -0.005];
 let rotate = [19.666666666666664, -30];
@@ -50,8 +50,10 @@ export default class App extends Vue {
     //this.toggleSpin();
   }
 
-  onMarkerSelect(feature: Feature) {
+  onMarkerSelect(feature: Feature<Point>) {
     console.log("Selected", { ...feature.properties });
+    let p = feature.geometry.coordinates;
+    this.rotation = [-p[0], -p[1]];
   }
 
   toggleSpin() {
