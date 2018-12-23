@@ -6,13 +6,14 @@
           <MapSymbolLayer :layer="layer"/>
         </GlobeMap>
       </div>
-      <div class="column is-4 has-background-light sidebar">
+      <div class="column is-4 has-background-white-bis sidebar">
         <div class="content">
           <h1>D3 map experiment</h1>
         </div>
         <div>
           <button class="button" @click="toggleSpin">Toggle spin</button>
         </div>
+        <MarkerList :markers="layer" @markerSelect="onMarkerSelect"/>
       </div>
     </div>
   </div>
@@ -25,12 +26,15 @@ import GlobeMap from "./components/GlobeMap.vue";
 import MapSymbolLayer from "./components/MapSymbolLayer.vue";
 
 import { MARKERS } from "./markers";
+import MarkerList from "@/components/MarkerList.vue";
+import { Feature } from "geojson";
 
 const velocity = [0.015, -0.005];
 let rotate = [19.666666666666664, -30];
 
 @Component({
   components: {
+    MarkerList,
     GlobeMap,
     MapSymbolLayer
   }
@@ -44,6 +48,10 @@ export default class App extends Vue {
 
   mounted() {
     //this.toggleSpin();
+  }
+
+  onMarkerSelect(feature: Feature) {
+    console.log("Selected", { ...feature.properties });
   }
 
   toggleSpin() {

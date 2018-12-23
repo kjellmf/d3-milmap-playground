@@ -67,8 +67,7 @@ export default class GlobeMapComponent extends Vue {
     if (this.interactive) {
       geoZoom()
         .projection(proj)
-        .onMove(this.refresh)
-        (svg.node());
+        .onMove(this.refresh)(svg.node());
     }
   }
 
