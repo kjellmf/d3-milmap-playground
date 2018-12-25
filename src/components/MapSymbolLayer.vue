@@ -5,6 +5,8 @@ import { geoDistance } from "d3-geo";
 import * as ms from "milsymbol";
 import { FeatureCollection } from "geojson";
 
+const DEFAULT_SIDC = "10030100001101000000";
+
 @Component
 export default class MapSymbolLayer extends Vue {
   isMounted = false;
@@ -24,7 +26,7 @@ export default class MapSymbolLayer extends Vue {
       .append("g")
       .attr("class", "symbol")
       .html((d: any) => {
-        let sidc = d.properties.sidc || "10030100001101000000";
+        let sidc = d.properties.sidc || DEFAULT_SIDC;
         let s = new ms.Symbol(sidc, { size: 20 });
         d.s = s;
         return s.asSVG();
