@@ -106,7 +106,7 @@ export class D3GlobeMap {
     transition()
       .duration(2000)
       .tween("rotate", () => {
-        let r = interpolate(proj.rotate(), [-p[0], -p[1]]) as any;
+        let r = interpolate(proj.rotate(), [-p[0], -p[1], 0]) as any;
         return function (t) {
           proj.rotate(r(t));
           vm.refresh()

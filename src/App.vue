@@ -31,7 +31,7 @@ import { Feature, Point } from "geojson";
 import GlobeMap from "@/components/GlobeMap.vue";
 
 const velocity = [0.015, -0.005];
-let rotate = [19.666666666666664, -30];
+let rotate = [19.666666666666664, -30, 0];
 
 @Component({
   components: {
@@ -62,10 +62,12 @@ export default class App extends Vue {
       if (this.timer) {
         this.timer.stop();
       }
+      rotate = (this.$refs.gmap as any).getRotation();
       this.timer = timer(dt => {
         this.rotation = [
           rotate[0] + velocity[0] * dt,
-          rotate[1] + velocity[1] * dt
+          rotate[1] + velocity[1] * dt,
+          rotate[2]
         ];
       });
       this.spin = true;
