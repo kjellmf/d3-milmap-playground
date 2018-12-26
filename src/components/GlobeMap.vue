@@ -12,128 +12,41 @@ import {
   Watch,
   Provide
 } from "vue-property-decorator";
-import { select } from "d3-selection";
-import { geoOrthographic, geoPath, geoGraticule } from "d3-geo";
-import geoZoom from "d3-geo-zoom";
-import * as topojson from "topojson";
-import { transition } from "d3-transition";
-import { interpolate } from "d3-interpolate";
+import { D3GlobeMap } from "@/components/d3components";
 
-export type RefreshCallback = () => void;
-
-const world = require("../../node_modules/world-atlas/world/110m.json");
 const width = 900;
 const height = 900;
 
-const SCALE = 430;
-const ROTATION = [0, 0, 0] as [number, number, number];
-
-var proj = geoOrthographic()
-  .scale(SCALE)
-  .translate([width / 2, height / 2])
-  .clipAngle(90);
-
-let pathGenerator = geoPath()
-  .projection(proj)
-  .pointRadius(1.5);
-
-let graticule = geoGraticule();
-let svg: any;
-
 @Component
-export default class GlobeMapComponent extends Vue {
+export default class GlobeMapComponentTmp extends Vue {
   isMounted = false;
+  d3g!: D3GlobeMap;
   width = width;
   height = height;
-  centerPos = [0, 0];
-  refresCallbacks!: Array<RefreshCallback>;
   @Prop() rotation!: [number, number, number];
   @Prop({ type: Number }) scale!: number;
-  @Prop({ default: true }) interactive = true;
   @Provide() globeData: any = {};
 
-  created() {
-    this.refresCallbacks = [];
-  }
-
   mounted() {
-    svg = select(this.$el);
-    this.globeData.svg = svg;
-    this.globeData.proj = proj;
-    this.globeData.centerPos = this.centerPos;
-    proj.scale(this.scale || SCALE);
-    proj.rotate(this.rotation || ROTATION);
-    this.createGlobe();
-    this.refresh();
+    this.d3g = new D3GlobeMap(this.$el, this.width, this.height, {scale: this.scale});
+    this.globeData.mapContainer = this.d3g;
     this.isMounted = true;
-    if (this.interactive) {
-      geoZoom()
-        .projection(proj)
-        .onMove(this.refresh)(svg.node());
-    }
   }
 
   @Watch("rotation", { deep: true })
   onRotationChange(rotation: [number, number, number]) {
-    proj.rotate(rotation);
-    this.refresh();
-  }
-
-  createGlobe() {
-    svg
-      .append("circle")
-      .attr("cx", width / 2)
-      .attr("cy", height / 2)
-      .attr("r", proj.scale())
-      .attr("class", "earth-circle noclicks")
-      .attr("fill", "none");
-
-    svg
-      .append("path")
-      .data((topojson.feature(world, world.objects.land) as any).features)
-      .attr("class", "land")
-      .attr("d", pathGenerator as any);
-
-    svg
-      .append("path")
-      .datum(graticule)
-      .attr("class", "graticule noclicks")
-      .attr("d", pathGenerator);
-  }
-
-  refresh() {
-    this.globeData.centerPos = (proj as any).invert([
-      this.width / 2,
-      this.height / 2
-    ]);
-    svg.selectAll(".earth-circle").attr("r", proj.scale());
-    svg.selectAll(".land").attr("d", pathGenerator);
-    svg.selectAll(".countries path").attr("d", pathGenerator);
-    svg.selectAll(".graticule").attr("d", pathGenerator);
-    this.refresCallbacks.forEach(f => f());
-  }
-
-  @Provide()
-  registerRefreshCallback(f: RefreshCallback) {
-    this.refresCallbacks.push(f);
+    this.d3g.rotation = rotation;
   }
 
   getRotation() {
-    return proj.rotate();
+    return this.d3g.rotation;
   }
 
   rotateTo(p) {
-    let vm = this;
-    transition()
-      .duration(2000)
-      .tween("rotate", () => {
-        let r = interpolate(proj.rotate(), [-p[0], -p[1]]) as any;
-        return function (t) {
-          proj.rotate(r(t));
-          vm.refresh()
-        };
-      })
+    this.d3g.rotateTo(p);
   }
+
+
 }
 </script>
 

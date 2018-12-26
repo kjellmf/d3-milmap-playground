@@ -5,6 +5,7 @@
         <GlobeMap :rotation="rotation" :scale="scale" ref="gmap">
           <MapSymbolLayer :layer="layer"/>
         </GlobeMap>
+
       </div>
       <div class="column is-4 has-background-white-bis sidebar">
         <div class="content">
@@ -22,20 +23,20 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { timer, Timer } from "d3-timer";
-import GlobeMap from "./components/GlobeMap.vue";
 import MapSymbolLayer from "./components/MapSymbolLayer.vue";
 
 import { MARKERS } from "./markers";
 import MarkerList from "@/components/MarkerList.vue";
 import { Feature, Point } from "geojson";
+import GlobeMap from "@/components/GlobeMap.vue";
 
 const velocity = [0.015, -0.005];
 let rotate = [19.666666666666664, -30];
 
 @Component({
   components: {
-    MarkerList,
     GlobeMap,
+    MarkerList,
     MapSymbolLayer
   }
 })
