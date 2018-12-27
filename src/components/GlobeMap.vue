@@ -46,7 +46,6 @@ export default class GlobeMapComponentTmp extends Vue {
     this.d3g.rotateTo(p);
   }
 
-
 }
 </script>
 

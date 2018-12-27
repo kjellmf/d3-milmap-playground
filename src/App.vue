@@ -5,11 +5,10 @@
         <GlobeMap :rotation="rotation" :scale="scale" ref="gmap">
           <MapSymbolLayer :layer="layer"/>
         </GlobeMap>
-
       </div>
       <div class="column is-4 has-background-white-bis sidebar">
         <div class="content">
-          <h1>D3 map experiment</h1>
+          <h3>D3 map experiment</h3>
         </div>
         <div>
           <button class="button" @click="toggleSpin">Toggle spin</button>

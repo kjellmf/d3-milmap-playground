@@ -64,7 +64,7 @@ export class D3GlobeMap {
       .append("path")
       .data((topojson.feature(world, world.objects.land) as any).features)
       .attr("class", "land")
-      .attr("d", pathGenerator as any);
+      .attr("d", pathGenerator);
 
     svg
       .append("path")
@@ -118,7 +118,14 @@ export class D3GlobeMap {
 export class SymbolLayer {
 
   constructor(public layer: FeatureCollection, private mapContainer: D3GlobeMap) {
-    let { proj, svg } = this.mapContainer;
+    this.drawSymbolLayer();
+    mapContainer.registerRefreshCallback(() => {
+      this.positionSymbols()
+    });
+  }
+
+  private drawSymbolLayer() {
+    let { svg } = this.mapContainer;
 
     svg
       .append("g")
@@ -135,11 +142,7 @@ export class SymbolLayer {
         return s.asSVG();
       });
     this.positionSymbols();
-    mapContainer.registerRefreshCallback(() => {
-      this.positionSymbols()
-    });
   }
-
 
   positionSymbols() {
     let { proj, svg, centerPos } = this.mapContainer;
