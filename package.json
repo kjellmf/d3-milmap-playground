@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "author": "Kjell Magne Fauske <kjellmf@gmail.com>",
+  "main": "src/main.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/kjellmf/d3-milmap-playground.git"
@@ -36,6 +37,7 @@
     "@types/d3-selection": "^1.3.4",
     "@types/d3-timer": "^1.0.8",
     "@types/d3-transition": "^1.1.3",
+    "@types/geojson": "^7946.0.4",
     "@types/topojson": "^3.2.1",
     "@vue/cli-plugin-babel": "^3.2.0",
     "@vue/cli-plugin-eslint": "^3.2.0",
